@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FocusRoom</title>
+<style>
+:root{--bg:#f8f9fb;--card:#fff;--side:#fff;--ink:#111827;--mute:#6b7280;--line:#e5e7eb;--teal:#54b4a4;--teal-d:#2f7a70;--tint:#e8f7f4;--track:#eceef3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1417;--card:#171e22;--side:#141a1d;--ink:#f1f5f4;--mute:#97a3a8;--line:#263035;--tint:#18302d;--track:#222b30;--teal-d:#7fd1c3}}
+:root[data-theme="dark"]{--bg:#0f1417;--card:#171e22;--side:#141a1d;--ink:#f1f5f4;--mute:#97a3a8;--line:#263035;--tint:#18302d;--track:#222b30;--teal-d:#7fd1c3;color-scheme:dark}
+:root[data-theme="light"]{color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);display:flex;transition:background-color .3s,color .3s}
+aside{width:250px;background:var(--side);border-right:1px solid var(--line);flex-shrink:0}
+.logo{display:flex;align-items:center;gap:12px;padding:26px 24px;border-bottom:1px solid var(--line);font-weight:700;font-size:21px;color:var(--teal-d)}
+.logo i{width:24px;height:24px;border-radius:50%;border:6px solid var(--teal);border-top-color:#cdeee8;display:block}
+nav{padding:16px 10px;display:flex;flex-direction:column;gap:6px}
+nav button{display:flex;align-items:center;gap:14px;padding:13px 16px;border:0;background:none;border-radius:14px;font:600 16px inherit;font-family:inherit;color:var(--mute);cursor:pointer;text-align:left}
+nav button.on{background:var(--tint);color:var(--teal-d)}
+nav svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+main{flex:1;overflow:auto;padding:34px 40px;min-width:0}
+.wrap{max-width:720px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;gap:10px}
+h1{margin:0;font-size:30px;letter-spacing:-.02em}
+.hr{display:flex;align-items:center;gap:12px}
+.pill{background:var(--tint);color:var(--teal-d);font-weight:600;font-size:13px;padding:8px 16px;border-radius:99px;white-space:nowrap}
+.theme{display:flex;gap:2px;background:var(--track);padding:4px;border-radius:99px}
+.theme button{width:34px;height:34px;border:0;border-radius:50%;background:none;color:var(--mute);font-size:16px;cursor:pointer}
+.theme button.on{background:var(--card);color:var(--teal-d);box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.row{display:flex;gap:14px;margin-bottom:24px}
+input[type=text],input[type=number]{flex:1;min-width:0;padding:15px 20px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:16px;font:16px inherit;font-family:inherit}
+input[type=number]{flex:none;width:84px;padding:10px 12px;text-align:center}
+input:focus,button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.btn{background:linear-gradient(135deg,#54b4a4,#3f9186);color:#fff;border:0;border-radius:16px;font:600 16px inherit;font-family:inherit;padding:0 28px;cursor:pointer}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 16px;border-radius:99px;font:600 14px inherit;font-family:inherit;cursor:pointer}
+.chip.on{background:var(--tint);color:var(--teal-d);border-color:var(--teal)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+.item{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 20px;margin-bottom:14px;transition:background-color .3s}
+.av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#54b4a4,#3f8fb0);color:#fff;font-weight:700;display:grid;place-items:center;flex-shrink:0}
+.sm .av{background:var(--teal)}
+.item b{display:block}.item small{color:var(--mute);font-size:14px}
+.item .r{margin-left:auto;color:var(--mute);font-weight:600;font-size:14px;display:flex;align-items:center;gap:12px}
+.dot{margin-left:auto;width:12px;height:12px;border-radius:50%;background:#b9e6c9}
+h3{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin:30px 0 14px}
+.tabs{display:flex;background:var(--track);padding:6px;border-radius:18px;max-width:420px;margin:0 auto 36px}
+.tabs button{flex:1;border:0;background:none;padding:12px;border-radius:13px;font:600 15px inherit;font-family:inherit;color:var(--mute);cursor:pointer}
+.tabs button.on{background:var(--card);color:var(--ink)}
+.ring{position:relative;width:min(320px,80vw);aspect-ratio:1;margin:0 auto}
+.ring.run{filter:drop-shadow(0 0 18px rgba(84,180,164,.45))}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.time{font:500 64px ui-monospace,Menlo,monospace;letter-spacing:-.02em}
+.lbl{font-size:14px;font-weight:600;letter-spacing:.12em;color:var(--mute);margin-top:8px}
+.ctl{display:flex;justify-content:center;gap:16px;margin:40px 0 24px}
+.ctl .btn{width:180px;height:60px}
+.rst{width:60px;height:60px;border-radius:50%;border:0;background:var(--track);color:var(--mute);font-size:22px;cursor:pointer}
+.ctr{text-align:center;color:var(--mute);font-weight:500}.ctr b{color:var(--teal-d)}
+.bar{height:8px;background:var(--track);border-radius:9px;max-width:300px;margin:10px auto 0;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--teal);border-radius:9px;transition:width .4s}
+.hint{text-align:center;color:var(--mute);font-size:13px;margin-top:22px}
+kbd{background:var(--track);border-radius:6px;padding:2px 7px;font:12px ui-monospace,monospace}
+.empty{text-align:center;color:var(--mute);padding:60px 0}.empty div{font-size:48px;opacity:.4}
+.task{cursor:pointer}.task.done b{text-decoration:line-through;color:var(--mute)}
+.chk{width:24px;height:24px;border-radius:50%;border:2px solid var(--teal);display:grid;place-items:center;color:transparent;font-size:14px;flex-shrink:0}
+.done .chk{background:var(--teal);color:#fff}
+.acts{margin-left:auto;display:flex;gap:4px}
+.x{background:none;border:0;color:var(--mute);font-size:20px;cursor:pointer;padding:4px 8px}
+.x.on{color:#e0a82e}
+.player{background:var(--card);border-radius:32px;border:1px solid var(--line);padding:36px;text-align:center}
+.art{width:110px;height:110px;border-radius:30px;background:linear-gradient(135deg,#54b4a4,#3f8fb0);margin:0 auto 18px;display:grid;place-items:center;color:#fff;font-size:48px}
+.player h2{margin:0;font-size:22px}.player p{margin:6px 0 22px;color:var(--mute)}
+.player .btn{height:58px;padding:0 50px}
+.vol{display:flex;align-items:center;gap:12px;justify-content:center;margin-top:26px;color:var(--mute)}
+input[type=range]{accent-color:var(--teal);width:170px}
+.snd{display:grid;grid-template-columns:34px 110px 1fr;align-items:center;gap:12px;padding:14px 20px}
+.snd input{width:100%}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}
+.stat b{font-size:30px;display:block;color:var(--teal-d)}.stat small{color:var(--mute)}
+.chart{display:flex;align-items:flex-end;gap:10px;height:170px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}
+.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:6px;font-size:12px;color:var(--mute)}
+.col i{width:100%;max-width:34px;background:var(--teal);border-radius:8px 8px 3px 3px;min-height:3px}
+.set{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 4px;border-bottom:1px solid var(--line)}
+.set small{display:block;color:var(--mute)}
+.sw{position:relative;width:46px;height:26px;flex-shrink:0}
+.sw input{opacity:0;position:absolute;inset:0;width:100%;height:100%;margin:0;cursor:pointer;z-index:1}
+.sw span{position:absolute;inset:0;background:var(--track);border-radius:99px;transition:.2s}
+.sw span:after{content:"";position:absolute;width:20px;height:20px;top:3px;left:3px;background:#fff;border-radius:50%;transition:.2s}
+.sw input:checked+span{background:var(--teal)}.sw input:checked+span:after{left:23px}
+.zx{display:none}body.zen .zx{display:block;position:fixed;top:16px;right:16px;z-index:5}
+body.zen aside,body.zen header{display:none}
+@media(max-width:700px){aside{width:76px}.logo span,nav button span{display:none}.logo{padding:22px 24px}nav button{justify-content:center;padding:14px 0}main{padding:22px 16px}.snd{grid-template-columns:30px 1fr}.snd input{grid-column:1/-1}h1{font-size:24px}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.18)}100%{transform:scale(1);opacity:1}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes breathe{0%,100%{transform:scale(.7)}50%{transform:scale(1.2)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(120,210,160,.7)}50%{box-shadow:0 0 0 8px rgba(120,210,160,0)}}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 8px color-mix(in srgb,var(--teal) 30%,transparent))}50%{filter:drop-shadow(0 0 26px color-mix(in srgb,var(--teal) 70%,transparent))}}
+@keyframes eq{0%,100%{height:20%}50%{height:100%}}
+@keyframes grow{from{transform:scaleY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blob{from{transform:translate(0,0) scale(1)}to{transform:translate(8vw,6vh) scale(1.25)}}
+body::before,body::after{content:"";position:fixed;width:44vmax;height:44vmax;border-radius:50%;filter:blur(90px);opacity:.16;z-index:-1;pointer-events:none;animation:blob 20s ease-in-out infinite alternate}
+body::before{background:var(--teal);top:-18vmax;left:-12vmax}
+body::after{background:#3f8fb0;bottom:-20vmax;right:-14vmax;animation-delay:-8s}
+.logo i{animation:spin 10s linear infinite}
+#view.enter>*{animation:rise .55s cubic-bezier(.2,.8,.2,1) both}#view.enter>*:nth-child(2){animation-delay:.06s}#view.enter>*:nth-child(3){animation-delay:.12s}#view.enter>*:nth-child(n+4){animation-delay:.18s}
+.btn{background:linear-gradient(135deg,var(--teal),color-mix(in srgb,var(--teal) 72%,#000))}
+.av,.art{background:linear-gradient(135deg,var(--teal),color-mix(in srgb,var(--teal) 65%,#2a6fb0))}
+.btn,.chip,.rst{transition:transform .18s,box-shadow .25s,background-color .3s}
+.btn:hover,.rst:hover{transform:translateY(-2px);box-shadow:0 8px 20px color-mix(in srgb,var(--teal) 35%,transparent)}
+.chip:hover{transform:translateY(-1px)}.btn:active,.chip:active,.rst:active{transform:scale(.94)}
+.item{transition:background-color .3s,transform .22s,box-shadow .22s}.item:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.07)}
+nav button{transition:background-color .25s,color .25s,transform .2s}nav button:hover{transform:translateX(3px)}
+.ring.run{animation:glow 3s ease-in-out infinite}#kg{transition:transform 1s linear}
+.dot{animation:pulse 2s infinite}
+.col i{transform-origin:bottom;animation:grow .9s cubic-bezier(.2,.8,.2,1) both}
+.stat b{animation:pop .6s both}.done .chk{animation:pop .35s}
+.eq{display:flex;gap:5px;align-items:flex-end;height:46px}.eq i{width:7px;background:#fff;border-radius:4px;height:20%}
+.art.playing{animation:float 3s ease-in-out infinite}.art.playing .eq i{animation:eq 1s ease-in-out infinite}
+.eq i:nth-child(2){animation-delay:.15s!important}.eq i:nth-child(3){animation-delay:.3s!important}.eq i:nth-child(4){animation-delay:.45s!important}.eq i:nth-child(5){animation-delay:.6s!important}
+.breath{width:110px;height:110px;border-radius:50%;margin:22px auto 0;background:radial-gradient(circle,var(--teal),#3f8fb0);opacity:.8;animation:breathe 8s ease-in-out infinite}
+.quote{font-style:italic;margin-top:20px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,30px);background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:14px;font-weight:600;opacity:0;transition:.35s;z-index:40;pointer-events:none;white-space:nowrap}.toast.on{opacity:1;transform:translate(-50%,0)}
+#cf{position:fixed;inset:0;pointer-events:none;z-index:30}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;z-index:25;animation:fade .25s}.modal>div{background:var(--card);border-radius:28px;padding:32px;text-align:center;max-width:340px;animation:pop .4s both}
+.moods{display:flex;gap:12px;justify-content:center}.moods button{font-size:36px;border:0;background:var(--track);border-radius:20px;width:68px;height:68px;cursor:pointer;transition:transform .2s}.moods button:hover{transform:scale(1.15) rotate(-6deg)}
+.lvl{margin-bottom:14px}.lvl b{font-size:26px}
+.heat{display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(7,auto);grid-auto-flow:column;gap:4px}.hc{display:block;aspect-ratio:1;border-radius:4px;background:var(--track);animation:pop .4s both}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}.bd{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;text-align:center}.bd span{font-size:30px;display:block}.bd small{color:var(--mute);display:block;font-size:12px}.bd.lock{opacity:.4;filter:grayscale(1)}.bd:not(.lock){animation:pop .5s both}
+.dotc{width:34px;height:34px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:transform .2s}.dotc.on{border-color:var(--ink);transform:scale(1.15)}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<aside><div class="logo"><i></i><span>FocusRoom</span></div><nav id="nav"></nav></aside>
+<main><div class="wrap">
+<header><h1 id="title"></h1><div class="hr"><span class="pill" id="pill">Focus</span><div class="theme" id="theme" role="group" aria-label="Theme"></div></div></header>
+<div id="view"></div>
+</div></main>
+<button class="chip zx" id="zx">Exit zen</button>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dk=(d=new Date())=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const fm=m=>m>=60?(m/60).toFixed(1)+'h':m+'m';
+// ---- saved data
+const DEF={d:{focus:25,short:5,long:15},auto:true,chime:true,notify:false,sof:false,goal:4,master:70,sleep:0,mix:{},tasks:[],active:null,log:{},ses:{},cyc:0,room:null,theme:'auto',accent:'#54b4a4',ci:true,fl:{},dist:{},mood:{},badges:[]};
+let S=JSON.parse(JSON.stringify(DEF));
+try{Object.assign(S,JSON.parse(localStorage.getItem('fr-data')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('fr-data',JSON.stringify(S))}catch(e){}};
+// ---- nav
+const ICONS={timer:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+tasks:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12l3 3 5-6"/>',
+audio:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+stats:'<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',
+rooms:'<circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-7 7-7s7 3 7 7"/><path d="M16 4a4 4 0 010 8M19 15c2 1 3 3 3 6"/>',
+set:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>'};
+const TABS=[['timer','Timer','Focus Timer'],['tasks','Tasks','Focus Tasks'],['audio','Audio','Focus Sounds'],['stats','Stats','Your Progress'],['rooms','Rooms','Focus Rooms'],['set','Settings','Settings']];
+let tab='timer';
+function nav(){$('#nav').innerHTML=TABS.map(t=>`<button class="${t[0]===tab?'on':''}" data-t="${t[0]}"><svg viewBox="0 0 24 24">${ICONS[t[0]]}</svg><span>${t[1]}</span></button>`).join('');
+ document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;render()})}
+function pill(){$('#pill').textContent=S.room?'👥 '+S.room:(mode==='focus'?'Focus':'Break')}
+// ---- audio engine (generated sounds, no files)
+let AC,master,nodes={},mixOn=false,autoMix=false,sleepT=null;
+function ac(){if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();master=AC.createGain();master.gain.value=S.master/100;master.connect(AC.destination)}if(AC.state==='suspended')AC.resume();return AC}
+function nbuf(type){const n=AC.sampleRate*4,b=AC.createBuffer(1,n,AC.sampleRate),d=b.getChannelData(0);let l=0,b0=0,b1=0,b2=0;
+ for(let i=0;i<n;i++){const w=Math.random()*2-1;
+  if(type==='white')d[i]=w*.5;
+  else if(type==='brown'){l=(l+.02*w)/1.02;d[i]=l*3.5}
+  else if(type==='pink'){b0=.99765*b0+w*.099046;b1=.963*b1+w*.2965164;b2=.57*b2+w*1.0526913;d[i]=(b0+b1+b2+w*.1848)*.2}
+  else d[i]=Math.random()<.0008?w*1.5:0}
+ return b}
+const SND={rain:['Rain','🌧️'],ocean:['Ocean waves','🌊'],wind:['Forest wind','🍃'],fire:['Fireplace','🔥'],white:['White noise','⚪'],pink:['Pink noise','🌸'],brown:['Brown noise','🟤'],alpha:['Alpha waves','🎧']};
+const PRESETS={Cozy:{rain:45,fire:40},'Deep work':{brown:40,alpha:35},Nature:{wind:35,ocean:40},Study:{pink:30,rain:25}};
+const lv=id=>(S.mix[id]||0)/100*(id==='alpha'?.35:1);
+function build(id){ac();const g=AC.createGain();g.gain.value=0;g.connect(master);
+ const src=t=>{const s=AC.createBufferSource();s.buffer=nbuf(t);s.loop=true;s.start();return s};
+ const f=(t,fr)=>{const x=AC.createBiquadFilter();x.type=t;x.frequency.value=fr;return x};
+ const lfo=(fr,amt,tg)=>{const o=AC.createOscillator(),a=AC.createGain();o.frequency.value=fr;a.gain.value=amt;o.connect(a).connect(tg);o.start()};
+ if(id==='rain')src('white').connect(f('highpass',900)).connect(f('lowpass',9000)).connect(g);
+ else if(id==='ocean'){const m=AC.createGain();m.gain.value=.6;src('brown').connect(f('lowpass',700)).connect(m).connect(g);lfo(.12,.4,m.gain)}
+ else if(id==='wind'){const bp=f('bandpass',500);bp.Q.value=.8;src('pink').connect(bp).connect(g);lfo(.07,300,bp.frequency)}
+ else if(id==='fire'){src('fire').connect(f('bandpass',1800)).connect(g);src('brown').connect(f('lowpass',200)).connect(g)}
+ else if(id==='alpha'){[[200,-1],[210,1]].forEach(([fr,p])=>{const o=AC.createOscillator(),pn=AC.createStereoPanner();o.frequency.value=fr;pn.pan.value=p;o.connect(pn).connect(g);o.start()})}
+ else src(id).connect(g);
+ nodes[id]=g}
+function applyMix(){if(!AC)return;for(const id in nodes)nodes[id].gain.setTargetAtTime(mixOn?lv(id):0,AC.currentTime,.15)}
+function toggleMix(on){mixOn=on;clearTimeout(sleepT);
+ if(on){ac();if(!Object.values(S.mix).some(v=>v>0))S.mix.rain=50;for(const id in S.mix)if(S.mix[id]>0&&!nodes[id])build(id);if(S.sleep)sleepT=setTimeout(()=>toggleMix(false),S.sleep*60000)}
+ applyMix();save();checkBadges();if(tab==='audio')drawAudio()}
+function chime(){if(!S.chime)return;try{const a=ac();[660,880].forEach((f,i)=>{const t=a.currentTime+i*.25,o=a.createOscillator(),g=a.createGain();o.frequency.value=f;g.gain.setValueAtTime(.2,t);g.gain.exponentialRampToValueAtTime(.001,t+.4);o.connect(g).connect(a.destination);o.start(t);o.stop(t+.45)})}catch(e){}}
+function note(m){if(S.notify&&'Notification' in window&&Notification.permission==='granted')try{new Notification('FocusRoom',{body:m})}catch(e){}}
+// ---- timer
+const NAMES={focus:'Focus',short:'Short Break',long:'Long Break'},LBL={focus:'FOCUS SESSION',short:'SHORT BREAK',long:'LONG BREAK'};
+let mode='focus',left=S.d.focus*60,running=false,iv=null,endAt=0;
+const total=()=>S.d[mode]*60;
+function startT(){running=true;endAt=Date.now()+left*1000;iv=setInterval(tick,250);try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(l=>wl=l).catch(()=>{})}catch(e){}if(mode==='focus'&&S.sof&&!mixOn){autoMix=true;toggleMix(true)}}
+function stopT(){running=false;clearInterval(iv);try{wl&&wl.release();wl=null}catch(e){}document.title='FocusRoom';if(autoMix){autoMix=false;toggleMix(false)}}
+function setMode(m){stopT();mode=m;left=total();pill()}
+function finish(){const wasF=mode==='focus';stopT();
+ if(wasF){const k=dk();S.log[k]=(S.log[k]||0)+S.d.focus;S.ses[k]=(S.ses[k]||0)+1;S.cyc++;const t=S.tasks.find(x=>x.id===S.active);if(t)t.p++}
+ chime();note(wasF?'Focus session complete. Time for a break.':'Break over. Ready to focus?');
+ if(wasF){const h=new Date().getHours();if(h>=22)S.fl.night=1;if(h<8)S.fl.early=1;const dn=S.ses[dk()];confetti(dn===S.goal?240:70);toast(dn===S.goal?'🎯 Daily goal reached!':'✅ Session complete');checkBadges();if(S.ci)setTimeout(showMood,700)}
+ mode=wasF?(S.cyc%4===0?'long':'short'):'focus';left=total();save();pill();
+ if(S.auto)startT();
+ render()}
+function tick(){left=Math.max(0,Math.round((endAt-Date.now())/1000));if(left<=0)return finish();
+ document.title=fm2(left)+' · FocusRoom';const t=$('#time');if(t){t.textContent=fm2(left);$('#arc').setAttribute('stroke-dashoffset',2*Math.PI*140*(1-Math.min(1,left/total())));$('#kg').style.transform='rotate('+360*Math.min(1,left/total())+'deg)'}}
+const fm2=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+function ring(){const C=2*Math.PI*140;return `<div class="ring${running?' run':''}"><svg viewBox="0 0 320 320"><circle cx="160" cy="160" r="140" fill="none" stroke="var(--track)" stroke-width="14"/><circle id="arc" cx="160" cy="160" r="140" fill="none" stroke="${mode==='focus'?'var(--teal)':'#6aa7e0'}" stroke-width="14" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-Math.min(1,left/total()))}"/><g id="kg" style="transform-origin:160px 160px;transform:rotate(${360*Math.min(1,left/total())}deg)"><circle cx="300" cy="160" r="9" fill="#fff" stroke="${mode==='focus'?'var(--teal)':'#6aa7e0'}" stroke-width="4"/></g></svg><div class="c"><div class="time" id="time">${fm2(left)}</div><div class="lbl">${LBL[mode]}</div></div></div>`}
+function drawTimer(){const k=dk(),done=S.ses[k]||0,pct=Math.min(100,done/S.goal*100),at=S.tasks.find(x=>x.id===S.active&&!x.d);
+ $('#view').innerHTML=`<div class="tabs">${Object.keys(NAMES).map(m=>`<button class="${m===mode?'on':''}" data-m="${m}">${NAMES[m]}</button>`).join('')}</div>${ring()}
+ <div class="ctl"><button class="rst" id="rst" title="Reset (R)" aria-label="Reset">↺</button><button class="btn" id="go">${running?'❚❚ Pause':'▶ Start'}</button><button class="rst" id="skip" title="Skip" aria-label="Skip">⏭</button></div>
+ <div class="ctr"><b>${done}</b> of ${S.goal} sessions today</div><div class="bar"><i style="width:${pct}%"></i></div>
+ ${at?`<div class="ctr" style="margin-top:14px">Working on: <b>${esc(at.t)}</b></div>`:''}
+ ${mode!=='focus'?'<div class="breath"></div><div class="ctr" id="bl" style="margin-top:12px">Breathe in…</div>':''}<div class="chips" style="justify-content:center;margin-top:16px"><button class="chip" id="plus">＋5 min</button>${mode==='focus'?`<button class="chip" id="dist">＋ Distraction (${S.dist[dk()]||0})</button>`:''}<button class="chip" id="zen">⛶ Zen mode</button> <button class="chip ${mixOn?'on':''}" id="snd">${mixOn?'🔊 Sounds on':'🔈 Sounds off'}</button></div>
+ <div class="hint quote">${QUOTES[quoteI%QUOTES.length]}</div><div class="hint"><kbd>Space</kbd> start · <kbd>R</kbd> reset · <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> modes · <kbd>F</kbd> zen</div>`;
+ document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{setMode(b.dataset.m);drawTimer()});
+ $('#go').onclick=()=>{running?stopT():startT();drawTimer()};
+ $('#rst').onclick=()=>{stopT();left=total();drawTimer()};
+ $('#skip').onclick=()=>{setMode(mode==='focus'?'short':'focus');drawTimer()};
+ $('#zen').onclick=zen;$('#snd').onclick=()=>{autoMix=false;toggleMix(!mixOn)}}
+function zen(){S.fl.zen=1;checkBadges();const b=document.body;b.classList.toggle('zen');try{b.classList.contains('zen')?document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen():document.fullscreenElement&&document.exitFullscreen()}catch(e){}}
+$('#zx').onclick=zen;document.onfullscreenchange=()=>{if(!document.fullscreenElement)document.body.classList.remove('zen')};
+// ---- tasks
+function drawTasks(){const dn=S.tasks.filter(t=>t.d).length;
+ $('#view').innerHTML=`<div class="row"><input type="text" id="ti" placeholder="What are you working on?"><button class="btn" id="add" style="padding:0 34px">Add</button></div>
+ ${S.tasks.length?`<div class="ctr" style="text-align:left;margin-bottom:14px">${dn} of ${S.tasks.length} done ${dn?'<button class="chip" id="clr" style="margin-left:8px">Clear done</button>':''}</div>`:''}
+ ${S.tasks.length?`<div class="chips" style="margin:0 0 14px">${['all','active','done'].map(f=>`<button class="chip ${flt===f?'on':''}" data-f="${f}">${f[0].toUpperCase()+f.slice(1)}</button>`).join('')}</div>`:''}${S.tasks.length?S.tasks.filter(t=>flt==='all'||(flt==='done')===t.d).map(t=>`<div class="item task ${t.d?'done':''}" data-id="${t.id}"><span class="chk" data-a="tg">✓</span><div><b>${esc(t.t)}</b><small>🍅 ${t.p} focus sessions</small></div><span class="acts"><button class="x ${S.active===t.id?'on':''}" data-a="act" title="Focus on this task">${S.active===t.id?'★':'☆'}</button><button class="x" data-a="del" title="Delete">×</button></span></div>`).join(''):'<div class="empty"><div>✎</div><p>No tasks yet. Add your first focus task above.</p></div>'}`;
+ const add=()=>{const v=$('#ti').value.trim();if(v){S.tasks.unshift({id:Date.now()+Math.random(),t:v,d:false,p:0});save();drawTasks();$('#ti').focus()}};
+ $('#add').onclick=add;$('#ti').onkeydown=e=>{if(e.key==='Enter')add()};
+ const c=$('#clr');if(c)c.onclick=()=>{S.tasks=S.tasks.filter(t=>!t.d);save();drawTasks()};
+ document.querySelectorAll('.task').forEach(el=>el.onclick=e=>{const a=e.target.closest('[data-a]'),id=+el.dataset.id,t=S.tasks.find(x=>x.id===id);if(!t)return;
+  if(a&&a.dataset.a==='del'){S.tasks=S.tasks.filter(x=>x!==t);if(S.active===id)S.active=null}
+  else if(a&&a.dataset.a==='act'){S.active=S.active===id?null:id}
+  else t.d=!t.d;save();drawTasks()})}
+// ---- audio tab
+function drawAudio(){const on=Object.keys(S.mix).filter(i=>S.mix[i]>0).map(i=>SND[i][0]);
+ $('#view').innerHTML=`<div class="player"><div class="art ${mixOn?'playing':''}">${mixOn?'<div class="eq"><i></i><i></i><i></i><i></i><i></i></div>':'♪'}</div><h2>${mixOn&&on.length?esc(on.join(' + ')):'Your focus mix'}</h2><p>${mixOn?'Playing':'Mix sounds below, then press play'}</p>
+ <button class="btn" id="pl">${mixOn?'Pause Sounds':'Play Sounds'}</button>
+ <div class="vol">🔈<input type="range" id="mv" min="0" max="100" value="${S.master}" aria-label="Master volume"></div></div>
+ <h3>Presets</h3><div class="chips">${Object.keys(PRESETS).map(p=>`<button class="chip" data-p="${p}">${p}</button>`).join('')}</div>
+ <h3>Sleep timer</h3><div class="chips">${[0,15,30,60].map(m=>`<button class="chip ${S.sleep===m?'on':''}" data-s="${m}">${m?m+' min':'Off'}</button>`).join('')}</div>
+ <h3>Mixer</h3>${Object.entries(SND).map(([id,[n,e]])=>`<div class="item snd"><span style="font-size:22px">${e}</span><b>${n}</b><input type="range" min="0" max="100" value="${S.mix[id]||0}" data-id="${id}" aria-label="${n} volume"></div>`).join('')}
+ <p class="hint">Alpha waves work best with headphones.</p>`;
+ $('#pl').onclick=()=>{autoMix=false;toggleMix(!mixOn)};
+ $('#mv').oninput=e=>{S.master=+e.target.value;if(master)master.gain.value=S.master/100;save()};
+ document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{S.sleep=+b.dataset.s;save();if(mixOn)toggleMix(true);else drawAudio()});
+ document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{S.mix={...PRESETS[b.dataset.p]};autoMix=false;mixOn=false;toggleMix(true);for(const id in S.mix)if(S.mix[id]>0&&!nodes[id])build(id);for(const id in nodes)if(!S.mix[id])nodes[id].gain.value=0;applyMix()});
+ document.querySelectorAll('.snd input').forEach(r=>r.oninput=()=>{const id=r.dataset.id;S.mix[id]=+r.value;if(r.value>0&&!mixOn){autoMix=false;toggleMix(true);return}if(r.value>0&&!nodes[id]&&AC)build(id);applyMix();save();checkBadges()})}
+// ---- stats
+function drawStats(){const k=dk();let st=0;const d=new Date();if(!(S.log[dk(d)]>0))d.setDate(d.getDate()-1);while(S.log[dk(d)]>0){st++;d.setDate(d.getDate()-1)}
+ const days=[...Array(7)].map((_,i)=>{const x=new Date();x.setDate(x.getDate()-6+i);return[S.log[dk(x)]||0,x.toLocaleDateString(undefined,{weekday:'short'})]});
+ const mx=Math.max(60,...days.map(x=>x[0])),tm=Object.values(S.log).reduce((a,b)=>a+b,0),ts=Object.values(S.ses).reduce((a,b)=>a+b,0);
+ $('#view').innerHTML=`${levelHTML()}<div class="cards"><div class="stat"><b>${fm(S.log[k]||0)}</b><small>Focused today</small></div><div class="stat"><b>${S.ses[k]||0}/${S.goal}</b><small>Sessions vs daily goal</small></div><div class="stat"><b>${st} ${st===1?'day':'days'}</b><small>Current streak</small></div><div class="stat"><b>${fm(tm)}</b><small>${ts} sessions in total</small></div></div>
+ <h3>Last 7 days</h3><div class="chart">${days.map(x=>`<div class="col"><span>${x[0]?fm(x[0]):''}</span><i style="height:${x[0]/mx*100}%"></i><span>${x[1]}</span></div>`).join('')}</div>${heat()}${badgesHTML()}`}
+// ---- rooms
+const ROOMS=[['Deep Focus','Silent coding sessions',12],['Study Together','Pomodoro with chat',8],["Writers' Block",'Creative writing sprints',5],['Night Owls','Late night focus crew',6],['Morning Flow','Early bird sessions',11]];
+const PEOPLE=['Alex','Sam','Jordan','Taylor','Casey'];
+function drawRooms(){
+ $('#view').innerHTML=`<div class="row"><input type="text" id="ri" placeholder="Create a new focus room..."><button class="btn" id="cr" style="padding:0 34px">Create</button></div>
+ ${ROOMS.map((r,i)=>`<div class="item"><div class="av">${esc(r[0][0])}</div><div><b>${esc(r[0])}</b><small>${esc(r[1])}</small></div><span class="r"><span class="cnt" data-i="${i}">${r[2]+(S.room===r[0]?1:0)}</span> online <button class="chip ${S.room===r[0]?'on':''}" data-j="${i}">${S.room===r[0]?'Leave':'Join'}</button></span></div>`).join('')}
+ <h3>Online now</h3>${PEOPLE.map(p=>`<div class="item sm"><div class="av">${p[0]}</div><div><b>${p}</b><small>Focusing session</small></div><span class="dot"></span></div>`).join('')}`;
+ const add=()=>{const v=$('#ri').value.trim();if(v){ROOMS.unshift([v,'New focus room',0]);S.room=v;save();pill();drawRooms()}};
+ $('#cr').onclick=add;$('#ri').onkeydown=e=>{if(e.key==='Enter')add()};
+ document.querySelectorAll('[data-j]').forEach(b=>b.onclick=()=>{const n=ROOMS[+b.dataset.j][0];S.room=S.room===n?null:n;save();pill();drawRooms()})}
+// ---- settings
+function drawSet(){const sw=(id,v,t,s)=>`<div class="set"><div><b>${t}</b><small>${s}</small></div><label class="sw"><input type="checkbox" id="${id}" ${v?'checked':''}><span></span></label></div>`;
+ $('#view').innerHTML=`<h3 style="margin-top:0">Quick presets</h3><div class="chips">${Object.keys(TECH).map(k=>`<button class="chip" data-tech="${k}">${k}</button>`).join('')}</div><h3>Accent colour</h3><div class="chips">${ACC.map(([n,c])=>`<button class="dotc ${S.accent===c?'on':''}" data-ac="${c}" style="background:${c}" title="${n}" aria-label="${n}"></button>`).join('')}</div><h3>Timer lengths (minutes)</h3>${Object.keys(NAMES).map(m=>`<div class="set"><b>${NAMES[m]}</b><input type="number" min="1" max="180" value="${S.d[m]}" data-d="${m}"></div>`).join('')}
+ <div class="set"><div><b>Daily goal</b><small>Focus sessions per day</small></div><input type="number" min="1" max="20" value="${S.goal}" id="goal"></div>
+ <h3>Behavior</h3>
+ ${sw('auto',S.auto,'Auto-start next session','Switch between focus and breaks automatically')}
+ ${sw('chime',S.chime,'Finish chime','Play a sound when a session ends')}
+ ${sw('notify',S.notify,'Desktop notifications','Get alerted when a session ends')}
+ ${sw('sof',S.sof,'Play sounds during focus','Start your sound mix when focus begins')}
+ ${sw('ci',S.ci,'Mood check-in','Ask how a session went when it ends')}
+ <h3>Data</h3><div class="chips"><button class="chip" id="rt">Reset today</button><button class="chip" id="ra">Clear all data</button></div>`;
+ document.querySelectorAll('[data-d]').forEach(i=>i.onchange=()=>{const m=i.dataset.d;S.d[m]=Math.min(180,Math.max(1,+i.value||1));if(!running&&mode===m)left=total();save()});
+ $('#goal').onchange=e=>{S.goal=Math.min(20,Math.max(1,+e.target.value||1));save()};
+ ['auto','chime','sof','ci'].forEach(k=>$('#'+k).onchange=e=>{S[k]=e.target.checked;save()});
+ $('#notify').onchange=e=>{S.notify=e.target.checked;if(S.notify&&'Notification' in window&&Notification.permission==='default')Notification.requestPermission();save()};
+ $('#rt').onclick=()=>{const k=dk();delete S.log[k];delete S.ses[k];save();$('#rt').textContent='Done'};
+ $('#ra').onclick=()=>{if(confirm('Clear all tasks, stats and settings?')){stopT();S=JSON.parse(JSON.stringify(DEF));save();mode='focus';left=total();applyTheme();render()}}}
+// ---- theme
+function applyTheme(){const r=document.documentElement,t=S.theme;if(S.accent&&S.accent!=='#54b4a4'){r.style.setProperty('--teal',S.accent);r.style.setProperty('--tint','color-mix(in srgb,'+S.accent+' 14%,var(--card))');r.style.setProperty('--teal-d','color-mix(in srgb,'+S.accent+' 62%,var(--ink))')}else['--teal','--tint','--teal-d'].forEach(p=>r.style.removeProperty(p));t==='auto'?r.removeAttribute('data-theme'):r.setAttribute('data-theme',t);
+ $('#theme').innerHTML=[['light','☀','Light'],['auto','◐','Auto (follow system)'],['dark','☾','Dark']].map(([k,i,n])=>`<button class="${k===t?'on':''}" data-th="${k}" title="${n}" aria-label="${n}">${i}</button>`).join('');
+ document.querySelectorAll('[data-th]').forEach(b=>b.onclick=()=>{S.theme=b.dataset.th;save();applyTheme()})}
+// ---- keyboard
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT|BUTTON/.test(e.target.tagName)||e.ctrlKey||e.metaKey)return;
+ if(e.key==='f'||e.key==='F')return zen();
+ if(tab!=='timer')return;
+ if(e.code==='Space'){e.preventDefault();$('#go').click()}
+ else if(e.key==='r'||e.key==='R')$('#rst').click();
+ else if(e.key==='1'||e.key==='2'||e.key==='3'){setMode(['focus','short','long'][+e.key-1]);drawTimer()}});
+function render(){const v=$('#view');v.classList.remove('enter');void v.offsetWidth;v.classList.add('enter');quoteI=Math.floor(Math.random()*QUOTES.length);nav();pill();$('#title').textContent=TABS.find(t=>t[0]===tab)[2];({timer:drawTimer,tasks:drawTasks,audio:drawAudio,stats:drawStats,rooms:drawRooms,set:drawSet})[tab]()}
+// ---- extras: effects, gamification, presets
+let wl=null,flt='all',quoteI=0,bi=false;
+const QUOTES=['Small steps still count.','One task, full attention.','Start before you feel ready.','Quiet focus builds big things.','Progress beats perfection.','Do the next small thing well.','Your future self will thank you.','Calm mind, steady hands.'];
+const TECH={'Pomodoro 25/5':[25,5,15],'52/17':[52,17,30],'Deep 50/10':[50,10,30],'Ultra 90/20':[90,20,30]};
+const ACC=[['Teal','#54b4a4'],['Ocean','#4a90d9'],['Violet','#8b6fd6'],['Rose','#e0668c'],['Amber','#e0a030']];
+function toast(m){let t=$('#toast');if(!t){t=document.createElement('div');t.id='toast';t.className='toast';document.body.appendChild(t)}t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2600)}
+function confetti(n){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;let c=$('#cf');if(!c){c=document.createElement('canvas');c.id='cf';document.body.appendChild(c)}
+ c.width=innerWidth;c.height=innerHeight;const x=c.getContext('2d'),cols=['#54b4a4','#3f8fb0','#f2c94c','#eb6f92','#8b6fd6','#ffffff'];
+ const p=[...Array(n)].map(()=>({x:innerWidth/2,y:innerHeight*.45,vx:(Math.random()-.5)*16,vy:-Math.random()*16-4,s:5+Math.random()*7,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cols[Math.random()*cols.length|0]}));
+ let f=0;(function a(){x.clearRect(0,0,c.width,c.height);p.forEach(q=>{q.vy+=.35;q.x+=q.vx;q.y+=q.vy;q.vx*=.99;q.r+=q.vr;x.save();x.translate(q.x,q.y);x.rotate(q.r);x.fillStyle=q.c;x.fillRect(-q.s/2,-q.s/3,q.s,q.s*.6);x.restore()});if(++f<150)requestAnimationFrame(a);else x.clearRect(0,0,c.width,c.height)})()}
+function showMood(){if(document.querySelector('.modal'))return;const m=document.createElement('div');m.className='modal';
+ m.innerHTML='<div><h2 style="margin:0 0 6px">Session complete 🎉</h2><p style="color:var(--mute);margin:0 0 18px">How did it go?</p><div class="moods"><button data-v="1">😫</button><button data-v="2">🙂</button><button data-v="3">🤩</button></div><button class="chip" style="margin-top:18px">Skip</button></div>';
+ m.onclick=e=>{const v=e.target.closest('[data-v]');if(v){const k=dk();(S.mood[k]=S.mood[k]||[]).push(+v.dataset.v);save();toast('Saved')}if(v||e.target===m||e.target.classList.contains('chip'))m.remove()};document.body.appendChild(m)}
+function agg(){let st=0;const d=new Date();if(!(S.log[dk(d)]>0))d.setDate(d.getDate()-1);while(S.log[dk(d)]>0){st++;d.setDate(d.getDate()-1)}
+ return{st,tm:Object.values(S.log).reduce((a,b)=>a+b,0),ts:Object.values(S.ses).reduce((a,b)=>a+b,0)}}
+const BADGES=[['🌱','First step','Finish a session',a=>a.ts>=1],['🔥','On fire','3-day streak',a=>a.st>=3],['🎯','Goal getter','Hit your daily goal',()=>Object.values(S.ses).some(v=>v>=S.goal)],['⏳','Marathoner','10 hours focused',a=>a.tm>=600],['🦉','Night owl','Finish after 10 pm',()=>S.fl.night],['🐦','Early bird','Finish before 8 am',()=>S.fl.early],['🧘','Zen master','Try zen mode',()=>S.fl.zen],['🎧','Sound sage','Mix 3 sounds',()=>Object.values(S.mix).filter(v=>v>0).length>=3],['💯','Centurion','100 sessions',a=>a.ts>=100]];
+function checkBadges(){const a=agg();BADGES.forEach(b=>{if(b[3](a)&&!S.badges.includes(b[1])){S.badges.push(b[1]);toast('🏆 Badge unlocked: '+b[1])}});save()}
+function levelHTML(){const a=agg(),xp=a.tm+a.ts*5,l=Math.floor(Math.sqrt(xp/25))+1,p=25*(l-1)**2,n=25*l*l,k=dk(),dc=S.dist[k]||0,m=S.mood[k]||[],am=m.length?['😫','🙂','🤩'][Math.round(m.reduce((x,y)=>x+y,0)/m.length)-1]:'–';
+ return `<div class="stat lvl"><div style="display:flex;justify-content:space-between;align-items:center"><div><b>Level ${l}</b><small>${xp} XP · ${n-xp} to next level</small></div><span style="font-size:40px">${['🌱','🌿','🌳','🏔️','🚀','👑'][Math.min(5,l-1)]}</span></div><div class="bar" style="max-width:none"><i style="width:${(xp-p)/(n-p)*100}%"></i></div><small>Today: ${dc} distractions · mood ${am}</small></div>`}
+function heat(){const c=[];for(let i=83;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const m=S.log[dk(d)]||0;c.push(`<i class="hc" title="${dk(d)}: ${m} min" style="animation-delay:${(83-i)*9}ms;${m?`background:color-mix(in srgb,var(--teal) ${Math.min(100,25+m/1.2)}%,var(--track))`:''}"></i>`)}return `<h3>Last 12 weeks</h3><div class="heat">${c.join('')}</div>`}
+function badgesHTML(){return `<h3>Badges</h3><div class="badges">${BADGES.map(b=>`<div class="bd ${S.badges.includes(b[1])?'':'lock'}"><span>${b[0]}</span><b>${b[1]}</b><small>${b[2]}</small></div>`).join('')}</div>`}
+$('#view').addEventListener('click',e=>{
+ const t=e.target.closest('[data-tech]');if(t){const [f,s,l]=TECH[t.dataset.tech];S.d={focus:f,short:s,long:l};if(!running)left=total();save();toast('Applied '+t.dataset.tech);drawSet();return}
+ const a=e.target.closest('[data-ac]');if(a){S.accent=a.dataset.ac;save();applyTheme();drawSet();return}
+ const f=e.target.closest('[data-f]');if(f){flt=f.dataset.f;drawTasks();return}
+ const d=e.target.closest('#dist');if(d){const k=dk();S.dist[k]=(S.dist[k]||0)+1;d.textContent='＋ Distraction ('+S.dist[k]+')';save();return}
+ if(e.target.closest('#plus')){left+=300;if(running)endAt+=300000;drawTimer();toast('＋5 minutes')}});
+setInterval(()=>{const e=$('#bl');if(e){bi=!bi;e.textContent=bi?'Breathe out…':'Breathe in…'}},4000);
+setInterval(()=>{ROOMS.forEach(r=>{r[2]=Math.max(1,r[2]+Math.round(Math.random()*2-1))});document.querySelectorAll('.cnt').forEach(c=>{const r=ROOMS[+c.dataset.i];if(r)c.textContent=r[2]+(S.room===r[0]?1:0)})},4000);
+applyTheme();render();
+</script>
+</body>
+</html>
